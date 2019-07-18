@@ -87,22 +87,20 @@ impl State for Playing {
         self
     }
     fn buttonpress(mut self: Box<Self>, button: ButtonArgs) -> Box<State> {
-        if button.state == ButtonState::Press {
-            if let Button::Keyboard(key) = button.button {
-                match key {
-                    Key::Escape => {
-                        return Box::new(Paused {
-                            score: self.score,
-                            snake: self.snake,
-                            food: self.food,
-                        })
-                    }
-                    Key::Up => self.snake.change_direction(Direction::Up),
-                    Key::Down => self.snake.change_direction(Direction::Down),
-                    Key::Left => self.snake.change_direction(Direction::Left),
-                    Key::Right => self.snake.change_direction(Direction::Right),
-                    _ => {}
+        if let Button::Keyboard(key) = button.button {
+            match key {
+                Key::Escape => {
+                    return Box::new(Paused {
+                        score: self.score,
+                        snake: self.snake,
+                        food: self.food,
+                    })
                 }
+                Key::Up => self.snake.change_direction(Direction::Up),
+                Key::Down => self.snake.change_direction(Direction::Down),
+                Key::Left => self.snake.change_direction(Direction::Left),
+                Key::Right => self.snake.change_direction(Direction::Right),
+                _ => {}
             }
         }
         self
@@ -146,15 +144,13 @@ impl State for Paused {
         self
     }
     fn buttonpress(self: Box<Self>, button: ButtonArgs) -> Box<dyn State> {
-        if button.state == ButtonState::Press {
-            if let Button::Keyboard(key) = button.button {
-                if key == Key::Escape {
-                    return Box::new(Playing {
-                        score: self.score,
-                        snake: self.snake,
-                        food: self.food,
-                    });
-                }
+        if let Button::Keyboard(key) = button.button {
+            if key == Key::Escape {
+                return Box::new(Playing {
+                    score: self.score,
+                    snake: self.snake,
+                    food: self.food,
+                });
             }
         }
         self
@@ -200,10 +196,8 @@ impl State for GameOver {
         self
     }
     fn buttonpress(self: Box<Self>, button: ButtonArgs) -> Box<dyn State> {
-        if button.state == ButtonState::Press {
-            if button.button == Button::Keyboard(Key::Space) {
-                return new_state();
-            }
+        if button.button == Button::Keyboard(Key::Space) {
+            return new_state();
         }
         self
     }

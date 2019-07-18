@@ -37,7 +37,9 @@ fn main() {
 			game = game.render(&event, &mut window, &mut glyphs);
 		}
 		if let Some(button) = event.button_args() {
-			game = game.buttonpress(button)
+			if button.state == ButtonState::Press {
+				game = game.buttonpress(button);
+			}
 		}
 	}
 }
