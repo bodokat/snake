@@ -29,15 +29,15 @@ struct SnakePiece(u32, u32);
 
 impl Snake {
     pub fn new(x: u32, y: u32) -> Snake {
-        return Snake {
+        Snake {
             direction: Direction::None,
             parts: LinkedList::from_iter((vec![SnakePiece(x, y)]).into_iter()),
             growing: false,
-        };
+        }
     }
     pub fn render(&self, ctx: Context, g2d: &mut G2d) {
         for SnakePiece(x, y) in self.parts.iter() {
-            let (x, y) = ((*x) as f64, (*y) as f64);
+            let (x, y) = (f64::from(*x), f64::from(*y));
             rectangle(
                 [0.0, 1.0, 0.5, 1.0],
                 [x * 10.0, y * 10.0, 10.0, 10.0],
@@ -47,7 +47,7 @@ impl Snake {
         }
         // render head
         let SnakePiece(x, y) = self.parts.front().expect("There is no Snake");
-        let (x, y) = ((*x) as f64, (*y) as f64);
+        let (x, y) = (f64::from(*x), f64::from(*y));
         rectangle(
             [1.0, 1.0, 0.0, 1.0],
             [x * 10.0, y * 10.0, 10.0, 10.0],
@@ -60,22 +60,22 @@ impl Snake {
         match self.direction {
             Direction::Up => {
                 if y != 0 {
-                    y = y - 1
+                    y -= 1
                 }
             }
             Direction::Down => {
                 if y != ROWS - 1 {
-                    y = y + 1
+                    y += 1
                 }
             }
             Direction::Left => {
                 if x != 0 {
-                    x = x - 1
+                    x -= 1
                 }
             }
             Direction::Right => {
                 if x != COLS - 1 {
-                    x = x + 1
+                    x += 1
                 }
             }
             Direction::None => {
@@ -91,7 +91,7 @@ impl Snake {
         } else {
             self.parts.pop_back();
         }
-        return false;
+        false
     }
     pub fn change_direction(&mut self, d: Direction) {
         self.direction = match d {
@@ -104,7 +104,7 @@ impl Snake {
     }
     pub fn has_eaten(&self, food: &Food) -> bool {
         let head = self.parts.front().expect("There is no Snake");
-        return head.0 == food.0 && head.1 == food.1;
+        head.0 == food.0 && head.1 == food.1
     }
     pub fn collision(&self, x: u32, y: u32) -> bool {
         self.parts.iter().any(|part| part.0 == x && part.1 == y)

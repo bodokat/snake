@@ -7,7 +7,7 @@ mod snake;
 mod food;
 
 mod game;
-use game::{new_state, State};
+use game::{new_game, Game};
 
 pub const COLS: u32 = 20;
 pub const ROWS: u32 = 20;
@@ -26,19 +26,19 @@ fn main() {
 
 	let mut glyphs = window.load_font("FiraSans-Regular.ttf").unwrap();
 
-	let mut game: Box<State> = new_state();
+	let mut game: Game = new_game();
 
 	let mut eventloop = Events::new(EventSettings::new()).ups(10);
 	while let Some(event) = eventloop.next(&mut window) {
 		if event.update_args().is_some() {
-			game = game.update();
+			game.update();
 		}
 		if event.render_args().is_some() {
-			game = game.render(&event, &mut window, &mut glyphs);
+			game.render(&event, &mut window, &mut glyphs);
 		}
 		if let Some(button) = event.button_args() {
 			if button.state == ButtonState::Press {
-				game = game.buttonpress(button);
+				game.buttonpress(button);
 			}
 		}
 	}
