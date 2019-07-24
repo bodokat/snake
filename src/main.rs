@@ -18,7 +18,7 @@ pub const WIDTH: f64 = CELLSIZE * ROWS as f64;
 fn main() {
 	let mut window: PistonWindow = WindowSettings::new(
 		"Snake",
-		[CELLSIZE * (ROWS as f64), CELLSIZE * (COLS as f64)],
+		[CELLSIZE * f64::from(ROWS), CELLSIZE * f64::from(COLS)],
 	)
 	.exit_on_esc(false)
 	.build()
@@ -30,10 +30,10 @@ fn main() {
 
 	let mut eventloop = Events::new(EventSettings::new()).ups(10);
 	while let Some(event) = eventloop.next(&mut window) {
-		if let Some(_) = event.update_args() {
+		if event.update_args().is_some() {
 			game = game.update();
 		}
-		if let Some(_) = event.render_args() {
+		if event.render_args().is_some() {
 			game = game.render(&event, &mut window, &mut glyphs);
 		}
 		if let Some(button) = event.button_args() {
